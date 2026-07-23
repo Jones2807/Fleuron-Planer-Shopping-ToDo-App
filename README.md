@@ -1,3 +1,5 @@
+🇬🇧 English · [🇩🇪 Deutsch](README.de.md)
+
 # Fleuron
 
 A free, cross-platform calendar, to-do, and shopping-list app for families, clubs, and small teams — built on your own CalDAV server. No cloud lock-in, no subscription, no proprietary backend required.
@@ -21,6 +23,34 @@ Along the way it became clear that the same idea is useful for more than just a 
 I'm not a programmer. Fleuron was built entirely through conversations with large language models (LLMs) — I described what I wanted, reviewed what came back, and iterated from there. I'm being upfront about that because it seems more honest than pretending otherwise, and because it might matter to you if you're deciding whether to use or contribute to this project.
 
 That said, the app has gone through a real security and code-quality pass (removing hardcoded secrets, hardening CORS configuration, fixing several data-handling bugs found during testing), and it's actively maintained. If you're an experienced Flutter developer and something looks off, I'd genuinely appreciate an issue or a pull request — that kind of review is exactly what a project like this benefits from.
+
+---
+
+## Screenshots
+
+### Calendar
+
+| | |
+|---|---|
+| ![Month view](docs/screenshots/month-view.png) Month view | ![Day view](docs/screenshots/day-view.png) Day view |
+| ![New event](docs/screenshots/new-event.png) Creating an event, with automatic calendar matching | ![Invalid combination](docs/screenshots/new-event-invalid.png) Guest combination without a matching calendar |
+
+### Team & workspaces
+
+| | |
+|---|---|
+| ![Menu](docs/screenshots/menu.png) Main menu | ![Workspace setup](docs/screenshots/workspace-setup.png) Setting up a workspace |
+| ![Grocy integration](docs/screenshots/workspace-grocy.png) Grocy integration for a workspace | ![Settings sync options](docs/screenshots/workspace-sync.png) Settings-sync options for a workspace |
+| ![Team members](docs/screenshots/team-members.png) Team members | ![Team colors](docs/screenshots/team-colors.png) Team colors for shared calendars |
+| ![Assign calendars](docs/screenshots/assign-calendars.png) Mapping CalDAV folders to people | |
+
+### Shopping & tasks
+
+| | |
+|---|---|
+| ![Shopping list](docs/screenshots/shopping-list.png) Shopping list | ![Shopping list by store](docs/screenshots/shopping-list-filtered.png) Shopping list, sorted for a specific store |
+| ![Store route sorting](docs/screenshots/store-route-sorting.png) Store route sorting | ![To-do list](docs/screenshots/todo-list.png) To-do lists |
+| ![New task](docs/screenshots/new-task.png) Adding a task | |
 
 ---
 
