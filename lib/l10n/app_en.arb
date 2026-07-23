@@ -1,0 +1,392 @@
+{
+  "@@locale": "en",
+  "appTitle": "Fleuron",
+  "@appTitle": {
+    "description": "The title of the application, shown e.g. in the OS task switcher."
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Title of the language switcher dialog and its menu entry."
+  },
+  "languageSystem": "System",
+  "@languageSystem": {
+    "description": "Option that makes the app follow the device's system language."
+  },
+  "languageGerman": "German",
+  "languageEnglish": "English",
+
+  "userSwitchDialogTitle": "Who's using this phone?",
+  "holidaySettingsTitle": "Country & Holidays",
+  "holidaySettingsDescription": "Choose which holidays should be marked in the calendar.",
+  "countryLabel": "Country",
+  "regionLabel": "State",
+  "cancel": "Cancel",
+  "save": "Save",
+  "countryGermany": "Germany",
+  "countryAustria": "Austria",
+  "countrySwitzerland": "Switzerland",
+  "regionNone": "No specific region",
+  "deleteRecurringEventTitle": "Delete recurring event",
+  "deleteRecurringEventMessage": "Do you want to delete only this occurrence or the entire series?",
+  "deleteThisOccurrence": "Only this occurrence",
+  "deleteEntireSeries": "Entire series",
+  "searchTooltip": "Search",
+  "viewSelectorTooltip": "Select view",
+  "todayTooltip": "Today",
+  "viewMonth": "Month view",
+  "viewTwoWeeks": "14 days",
+  "viewWeek": "Week view",
+  "newEvent": "New event",
+  "todos": "To-dos",
+  "shoppingList": "Shopping list",
+  "noEvents": "No events",
+  "allDay": "All day",
+  "allDayShort": "All\nday",
+
+  "notSignedIn": "Not signed in",
+  "activeProfile": "Active profile",
+  "sectionView": "VIEW",
+  "grayOutPastEventsLabel": "Gray out past events",
+  "weekNumbersLabel": "Week numbers",
+  "showHolidaysLabel": "Show holidays",
+  "sectionSettings": "SETTINGS",
+  "teamAndGroups": "Team & groups",
+  "addPeople": "Add people",
+  "teamColors": "Team colors (groups)",
+  "assignFolders": "Assign folders",
+  "workspacesAndAccounts": "Workspaces & accounts",
+  "teamSyncManual": "Team sync (manual)",
+  "helpAndGuide": "Guide & help",
+
+  "readOnlyCalendarSubtitle": "Read-only calendar",
+  "caldavWorkspaceSubtitle": "CalDAV workspace",
+  "newWorkspace": "New workspace",
+  "noWorkspacesTitle": "No workspaces yet",
+  "noWorkspacesSubtitle": "Create a separate workspace for\neach family or organization.",
+  "newWorkspaceTitle": "Create new workspace",
+  "editWorkspaceTitle": "Edit workspace",
+  "activateWorkspace": "Activate workspace",
+  "activateWorkspaceSubtitle": "Makes this area visible in the app",
+  "sectionCalendarBasics": "CALENDAR & BASICS",
+  "displayNameLabel": "Display name (e.g. Fire department)",
+  "readOnlySubscription": "Read-only subscription (.ics)",
+  "serverUrlLabel": "Server URL (WebDAV / CalDAV)",
+  "usernameLabel": "Username",
+  "passwordLabel": "Password",
+  "sectionTodos": "TASKS (TO-DOS)",
+  "enableTodoModule": "Enable to-do module",
+  "enableTodoModuleSubtitle": "Tasks are stored in this CalDAV account.",
+  "sectionShoppingList": "SHOPPING LIST",
+  "disabled": "Disabled",
+  "shoppingCaldav": "CalDAV (VTODO)",
+  "shoppingCaldavSubtitle": "Stores purchases as tasks",
+  "grocyServer": "Grocy server",
+  "grocyServerSubtitle": "Real smart-home inventory",
+  "grocyUrlLabel": "Grocy URL",
+  "apiKeyLabel": "API key",
+  "testAndLoadDefaults": "Test & load defaults",
+  "defaultsForNewItems": "Default values for new items",
+  "defaultLocationLabel": "Default location",
+  "defaultUnitLabel": "Default unit",
+  "sectionSettingsSync": "SETTINGS SYNC (COLORS & TEAM)",
+  "syncLocalNone": "Local (no sync)",
+  "syncCaldavJournal": "CalDAV (VJOURNAL)",
+  "syncCaldavJournalSubtitle": "Stored invisibly in the calendar",
+  "syncExternalWebdav": "External WebDAV server",
+  "syncExternalWebdavSubtitle": "Stored as a .json file",
+  "webdavUrlLabel": "WebDAV URL",
+  "deleteWorkspaceButton": "Delete this workspace",
+  "deleteWorkspaceTitle": "Delete workspace?",
+  "deleteWorkspaceMessage": "All settings for this workspace will be removed. Events on the server remain untouched.",
+  "delete": "Delete",
+  "nameUrlRequired": "Name and URL are required.",
+  "grocyConnectSuccess": "Connected successfully & defaults loaded!",
+  "grocyConnectFailed": "Connection failed.",
+
+  "newListTitle": "Create new list",
+  "newListHint": "e.g. Croatia vacation",
+  "shareWithFamily": "Share with family",
+  "everyoneSeesListSubtitle": "Everyone can see this list",
+  "onlyYouSeeListSubtitle": "Only you can see this list",
+  "create": "Create",
+  "renameListTitle": "Rename list",
+  "deleteListTitle": "Delete list",
+  "deleteListMessage": "Do you really want to delete the list '{listName}' from the server?",
+  "@deleteListMessage": {
+    "placeholders": {
+      "listName": { "type": "String" }
+    }
+  },
+  "blockedByServerTitle": "Blocked by server",
+  "blockedByServerMessage": "Your calendar server (e.g. Synology) blocks deleting entire lists through third-party apps for security reasons.\n\nPlease log into your calendar via the browser to delete this list there.",
+  "understood": "Understood",
+  "manageVisibility": "Manage visibility",
+  "manageVisibilityDescription": "Choose which lists appear on your dashboard. Hidden lists are not deleted.",
+  "noListsFoundOnServer": "No lists found on the server.",
+  "privateLabel": "Private",
+  "sharedLabel": "Shared",
+  "done": "Done",
+  "tasksTitle": "Tasks",
+  "newListMenuItem": "New list",
+  "showPrivateItems": "Show private items",
+  "hidePrivateItems": "Hide private items",
+  "noListsFound": "No lists found.",
+  "rename": "Rename",
+  "hide": "Hide",
+  "newTaskTitle": "New task",
+  "editTaskTitle": "Edit task",
+  "taskTitleLabel": "What needs to be done? *",
+  "noteOptionalLabel": "Note (optional)",
+  "dueDateOptional": "Due date (optional)",
+  "dueDatePrefix": "Due: {date}",
+  "@dueDatePrefix": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "allDoneMessage": "All done!",
+  "editAction": "Edit",
+  "taskFabLabel": "Task",
+
+  "newStoreTitle": "New store",
+  "newStoreHint": "e.g. Edeka or hardware store",
+  "deleteStoreTitle": "Delete store",
+  "deleteStoreMessage": "Do you really want to remove the profile '{profile}'?\n\nThe custom sort order for it will also be permanently deleted.",
+  "@deleteStoreMessage": {
+    "placeholders": {
+      "profile": { "type": "String" }
+    }
+  },
+  "profileDeletedMessage": "'{profile}' was deleted.",
+  "@profileDeletedMessage": {
+    "placeholders": {
+      "profile": { "type": "String" }
+    }
+  },
+  "renameCategoryTitle": "Rename category",
+  "newNameLabel": "New name",
+  "editItemTitle": "Edit item",
+  "titleLabel": "Title",
+  "categoryLabel": "Category (e.g. FRIDGE)",
+  "categoryHelperText": "Determines the sort order for stores",
+  "noShoppingListActiveTitle": "No shopping list active",
+  "noShoppingListActiveSubtitle": "Enable CalDAV or Grocy in the\nsettings for this workspace.",
+  "searchArticleHint": "Search item...",
+  "addArticleHint": "Add item...",
+  "allBoughtMessage": "All bought!",
+
+  "colorForGroupTitle": "Color for:\n{group}",
+  "@colorForGroupTitle": {
+    "placeholders": {
+      "group": { "type": "String" }
+    }
+  },
+  "groupColorsTitle": "Team colors",
+  "noGroupCalendarsFound": "No group calendars found.\nPlease check 'Calendar mapping' first.",
+  "tapToChangeColor": "Tap to change color",
+
+  "addPersonTitle": "Add person",
+  "editPersonTitle": "Edit person",
+  "nameLabel": "Name",
+  "chooseColorLabel": "Choose color:",
+  "teamAndColorsTitle": "Team & colors",
+  "noWorkspaceAvailable": "No workspace available.",
+  "noPeopleInWorkspace": "No people in this workspace.",
+  "addFirstPerson": "Add first person",
+
+  "mapCalendarsTitle": "Assign calendars",
+  "noActiveAccountsFound": "No active accounts found.",
+  "loadingFoldersAndPeople": "Loading folders & people...",
+  "noCalendarsFound": "No calendars found.",
+  "folderLabel": "Folder: \"{name}\"",
+  "@folderLabel": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "assignedPeopleLabel": "Assigned people:",
+  "noPeopleAssignedYet": "No people set up in this workspace yet.",
+
+  "uploadSuccessMessage": "Uploaded successfully!",
+  "downloadErrorMessage": "Error while downloading.",
+  "nothingToSyncMessage": "Everything is up to date. No changes on the server.",
+  "applyChangesTitle": "Apply changes?",
+  "diffAdded": "NEW",
+  "diffChanged": "CHANGED",
+  "diffRemoved": "WILL BE REMOVED",
+  "deviceFilterNote": "Note: The selected device filters are applied.",
+  "update": "Update",
+  "settingsAppliedMessage": "Settings applied!",
+  "noWorkspacesConfigured": "No workspaces configured.",
+  "activeWorkspaceLabel": "Active workspace",
+  "configuredBackendLabel": "Configured backend",
+  "noSyncBackendConfigured": "No sync backend is configured for this workspace. You can enable this under 'Workspaces & Accounts'.",
+  "synologyWebdavLabel": "Synology WebDAV",
+  "caldavPiggybackLabel": "CalDAV piggyback",
+  "fileNameLabel": "File name: {name}",
+  "@fileNameLabel": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "deviceFiltersLabel": "Device filters",
+  "teamAndCalendarColorsLabel": "Team & calendar colors",
+  "storesNamesLabel": "Stores (names)",
+  "routesLabel": "Routes (navigation)",
+  "checkAndLoad": "Check & load",
+  "send": "Send",
+
+  "chooseColorTitle": "Choose color",
+  "recurrenceTitle": "Repeat",
+  "recurrenceNone": "None",
+  "recurrenceDaily": "Daily",
+  "recurrenceWeekly": "Weekly",
+  "recurrenceBiWeekly": "Every 2 weeks",
+  "recurrenceMonthly": "Monthly",
+  "recurrenceCustomDays": "Specific weekdays",
+  "chooseWeekdaysTitle": "Choose weekdays",
+  "weekdayMon": "Mon",
+  "weekdayTue": "Tue",
+  "weekdayWed": "Wed",
+  "weekdayThu": "Thu",
+  "weekdayFri": "Fri",
+  "weekdaySat": "Sat",
+  "weekdaySun": "Sun",
+  "editEventTitle": "Edit event",
+  "eventTitle": "Event",
+  "saveToAccountLabel": "Save to account:",
+  "selectGuestsLabel": "Select guests",
+  "deselectAll": "Deselect all",
+  "selectAll": "Select all",
+  "combinationValidMessage": "Combination valid. Ready to save.",
+  "noFolderAssignedMessage": "⚠️ Please assign a server folder to this account first, under 'Settings -> Assign calendars'.",
+  "noSharedFolderMessage": "⚠️ Invalid: there is no shared folder for this guest selection in this account.",
+  "changeColorLabel": "Change color",
+  "repeatSummary": "Repeat: {value}",
+  "@repeatSummary": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "neverEnds": "Never ends",
+  "endsOn": "Ends on: {date}",
+  "@endsOn": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "minutesBeforeLabel": "{minutes} minutes before",
+  "@minutesBeforeLabel": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "noReminderLabel": "No reminder",
+  "reminderTitle": "Reminder",
+  "addLocationHint": "Add location",
+
+  "helpLoadError": "Error loading the guide.",
+
+  "newCategoryTitle": "New category",
+  "newCategoryHint": "e.g. Drugstore",
+  "newItemTitle": "New item",
+  "whatDoYouNeedLabel": "What do you need?",
+  "pleaseEnterNameValidator": "Please enter a name",
+  "categoryPlainLabel": "Category",
+  "pleaseSelectValidator": "Please select",
+  "newCategoryTooltip": "Create new category",
+  "addButtonLabel": "Add",
+  "editMasterDataTitle": "Edit master data",
+  "editMasterDataWarning": "Caution: changes the name across the entire inventory!",
+  "routeTitle": "Route: {profile}",
+  "@routeTitle": {
+    "placeholders": {
+      "profile": { "type": "String" }
+    }
+  },
+  "reorderCategoriesInstructions": "Press and hold a category, then drag it to the right position for your store.",
+
+  "searchEventsHint": "Search events...",
+  "enterTitleOrLocationHint": "Enter title or location...",
+  "noEventsFoundForQuery": "No events found for '{query}'.",
+  "@noEventsFoundForQuery": {
+    "placeholders": {
+      "query": { "type": "String" }
+    }
+  },
+  "filterViewTitle": "Filter view",
+  "saveAsPreset": "Save as preset",
+  "quickSelect": "Quick select",
+  "manualSelection": "Manual selection",
+  "newPresetTitle": "Save new preset",
+  "presetNameHint": "Name (e.g. Fire dept only)",
+  "presetSavedMessage": "Preset saved!",
+
+  "showAllPresetName": "Show all",
+
+  "untitledEventFallback": "Untitled",
+  "unnamedTaskFallback": "Unnamed",
+
+  "syncNewStore": "New store: {name}",
+  "@syncNewStore": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "syncStoreRemoved": "Store removed: {name}",
+  "@syncStoreRemoved": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "syncRoutesChanged": "Store routes (sort order) were changed",
+  "syncTeamOrColorsChanged": "People or calendar colors were changed",
+  "syncServerError": "Server responded with code: {code}",
+  "@syncServerError": {
+    "placeholders": {
+      "code": { "type": "int" }
+    }
+  },
+  "syncNetworkError": "Network error: {error}",
+  "@syncNetworkError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "syncNoActiveAccount": "No active CalDAV account found.",
+  "syncNoTaskListFound": "No task list found in the CalDAV account.",
+  "syncCaldavError": "CalDAV error: {error}",
+  "@syncCaldavError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+
+  "notificationChannelName": "Team Calendar",
+  "notificationChannelDescription": "Reminders for upcoming events",
+  "notificationTitleLabel": "📅 Event reminder",
+  "notificationEventTitle": "Event: {title}",
+  "@notificationEventTitle": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  },
+  "notificationBodyMinutes": "Starts in {minutes} minutes",
+  "@notificationBodyMinutes": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "notificationBigTextBody": "The event <b>\"{title}\"</b> starts in {minutes} minutes.<br><br><b>Location:</b> {location}",
+  "@notificationBigTextBody": {
+    "placeholders": {
+      "title": { "type": "String" },
+      "minutes": { "type": "int" },
+      "location": { "type": "String" }
+    }
+  },
+  "notificationLocationNotSpecified": "Not specified",
+
+  "notAppliedFilterOff": "Won't be applied - filter is off",
+  "nothingWillBeAppliedMessage": "None of this will be applied with your current filters."
+}

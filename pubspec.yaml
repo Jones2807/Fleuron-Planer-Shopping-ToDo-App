@@ -1,0 +1,85 @@
+name: fleuron
+description: "Fleuron: cross-platform calendar, to-do, and shopping list app with CalDAV and Grocy sync."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_markdown: ^0.7.4
+  # --- LOCALIZATION & FORMATTING ---
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+
+  # --- UI COMPONENTS ---
+  cupertino_icons: ^1.0.8
+  table_calendar: ^3.2.0
+  flutter_speed_dial: ^7.0.0
+  flutter_colorpicker: ^1.1.0
+
+  # --- LOCAL DATA & SETTINGS ---
+  shared_preferences: ^2.5.5
+  flutter_secure_storage: ^10.0.0
+  sqflite: ^2.4.2
+  path: ^1.9.1
+
+  # --- NETWORKING & PARSING (CalDAV / Grocy) ---
+  http: ^1.2.1
+  web_socket_channel: ^3.0.3
+  xml: ^6.3.0
+  icalendar_parser: ^1.1.0
+  caldav: ^1.4.2+3
+
+  # --- SYSTEM INTEGRATIONS (notifications) ---
+  flutter_local_notifications: ^21.0.0-dev.1
+  timezone: ^0.11.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+  # --- BUILD TOOLS (icons & splash screen) ---
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.7
+
+flutter:
+  generate: true
+  uses-material-design: true
+  assets:
+    - assets/
+
+
+# ==========================================
+# APP ICON CONFIGURATION
+# ==========================================
+flutter_launcher_icons:
+  android: true
+  ios: true
+
+  # Adaptive icons for modern Android versions (API 26+)
+  adaptive_icon_background: "#4A73D1"
+  adaptive_icon_foreground: "assets/logo_vordergrund.png"
+
+  # Fallback icon for iOS and older Android versions (needs an image with a solid background)
+  image_path: "assets/logo_fallback.png"
+
+  min_sdk_android: 21
+
+# ==========================================
+# SPLASH SCREEN CONFIGURATION
+# ==========================================
+flutter_native_splash:
+  color: "#4A73D1"
+  image: "assets/splash.png"
+  android: true
+  ios: true
+
+  # Specific adjustment for the Android 12+ splash screen API
+  android_12:
+    color: "#4A73D1"
+    image: "assets/splash.png"
