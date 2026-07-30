@@ -272,6 +272,14 @@ class _AddEventFullPageState extends State<AddEventFullPage> {
 
   String _formatTime(TimeOfDay time) => '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
 
+  /// Localized display label for a reminder offset in minutes, e.g.
+  /// "1 hour before" or "15 minutes before".
+  String _formatReminderLabel(int minutes, AppLocalizations l10n) {
+    if (minutes == 1440) return l10n.oneDayBeforeLabel;
+    if (minutes == 60) return l10n.oneHourBeforeLabel;
+    return l10n.minutesBeforeLabel(minutes);
+  }
+
   void _showColorPicker() {
     final l10n = AppLocalizations.of(context)!;
     showDialog(
@@ -615,11 +623,34 @@ class _AddEventFullPageState extends State<AddEventFullPage> {
 
               ListTile(
                 leading: Icon(Icons.alarm, color: _notificationsEnabled ? Colors.grey.shade600 : Colors.grey.shade400),
-                title: Text(_notificationsEnabled ? l10n.minutesBeforeLabel(_minutesBefore) : l10n.noReminderLabel, style: TextStyle(fontSize: 16, color: _notificationsEnabled ? Colors.black : Colors.grey)),
+                title: Text(_notificationsEnabled ? _formatReminderLabel(_minutesBefore, l10n) : l10n.noReminderLabel, style: TextStyle(fontSize: 16, color: _notificationsEnabled ? Colors.black : Colors.grey)),
                 trailing: IconButton(icon: const Icon(Icons.close, size: 20, color: Colors.grey), onPressed: () => setState(() => _notificationsEnabled = false)),
                 onTap: () {
-                  setState(() => _notificationsEnabled = true);
-                  showDialog(context: context, builder: (context) => AlertDialog(title: Text(l10n.reminderTitle), content: DropdownButton<int>(value: _minutesBefore, isExpanded: true, items: [5, 15, 30, 60, 1440].map((m) => DropdownMenuItem(value: m, child: Text(l10n.minutesBeforeLabel(m)))).toList(), onChanged: (v) { if (v != null) { setState(() => _minutesBefore = v); Navigator.pop(context); }})));
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(l10n.reminderTitle),
+                      content: DropdownButton<int?>(
+                        value: _notificationsEnabled ? _minutesBefore : null,
+                        isExpanded: true,
+                        items: [
+                          DropdownMenuItem<int?>(value: null, child: Text(l10n.noReminderLabel)),
+                          ...[5, 15, 30, 60, 1440].map((m) => DropdownMenuItem<int?>(value: m, child: Text(_formatReminderLabel(m, l10n)))),
+                        ],
+                        onChanged: (v) {
+                          setState(() {
+                            if (v == null) {
+                              _notificationsEnabled = false;
+                            } else {
+                              _notificationsEnabled = true;
+                              _minutesBefore = v;
+                            }
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                  );
                 },
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               ),

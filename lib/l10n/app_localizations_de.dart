@@ -292,7 +292,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get newListHint => 'z.B. Urlaub Kroatien';
 
   @override
-  String get shareWithFamily => 'Mit der Familie teilen';
+  String get shareWithFamily => 'Für andere sichtbar';
 
   @override
   String get everyoneSeesListSubtitle => 'Jeder sieht diese Liste';
@@ -687,6 +687,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get reminderTitle => 'Erinnerung';
+
+  @override
+  String get oneHourBeforeLabel => '1 Stunde vorher';
+
+  @override
+  String get oneDayBeforeLabel => '1 Tag vorher';
 
   @override
   String get addLocationHint => 'Ort hinzufügen';

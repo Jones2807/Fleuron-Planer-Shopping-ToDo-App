@@ -653,7 +653,7 @@ abstract class AppLocalizations {
   /// No description provided for @shareWithFamily.
   ///
   /// In en, this message translates to:
-  /// **'Share with family'**
+  /// **'Visible to others'**
   String get shareWithFamily;
 
   /// No description provided for @everyoneSeesListSubtitle.
@@ -1381,6 +1381,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reminder'**
   String get reminderTitle;
+
+  /// No description provided for @oneHourBeforeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'1 hour before'**
+  String get oneHourBeforeLabel;
+
+  /// No description provided for @oneDayBeforeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'1 day before'**
+  String get oneDayBeforeLabel;
 
   /// No description provided for @addLocationHint.
   ///

@@ -96,7 +96,7 @@
 
   "newListTitle": "Neue Liste anlegen",
   "newListHint": "z.B. Urlaub Kroatien",
-  "shareWithFamily": "Mit der Familie teilen",
+  "shareWithFamily": "Für andere sichtbar",
   "everyoneSeesListSubtitle": "Jeder sieht diese Liste",
   "onlyYouSeeListSubtitle": "Nur du siehst diese Liste",
   "create": "Erstellen",
@@ -224,6 +224,8 @@
   "minutesBeforeLabel": "{minutes} Minuten vorher",
   "noReminderLabel": "Keine Erinnerung",
   "reminderTitle": "Erinnerung",
+  "oneHourBeforeLabel": "1 Stunde vorher",
+  "oneDayBeforeLabel": "1 Tag vorher",
   "addLocationHint": "Ort hinzufügen",
 
   "helpLoadError": "Fehler beim Laden der Anleitung.",

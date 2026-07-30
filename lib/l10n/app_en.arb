@@ -105,7 +105,7 @@
 
   "newListTitle": "Create new list",
   "newListHint": "e.g. Croatia vacation",
-  "shareWithFamily": "Share with family",
+  "shareWithFamily": "Visible to others",
   "everyoneSeesListSubtitle": "Everyone can see this list",
   "onlyYouSeeListSubtitle": "Only you can see this list",
   "create": "Create",
@@ -283,6 +283,8 @@
   },
   "noReminderLabel": "No reminder",
   "reminderTitle": "Reminder",
+  "oneHourBeforeLabel": "1 hour before",
+  "oneDayBeforeLabel": "1 day before",
   "addLocationHint": "Add location",
 
   "helpLoadError": "Error loading the guide.",
