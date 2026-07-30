@@ -306,6 +306,17 @@ class CalDavService {
       final icalendar = ICalendar.fromString(iCalString);
       final data = icalendar.data;
 
+      // WORKAROUND: icalendar_parser drops nested TRIGGER/VALARM data from the
+      // VEVENT map (confirmed via debug logging), so the reminder is instead
+      // read directly from the raw ICS text, keyed by UID.
+      final Map<String, String> valarmBlocksByUid = {};
+      for (var block in iCalString.split('BEGIN:VEVENT').skip(1)) {
+        final uidMatch = RegExp(r'UID:([^\r\n]+)').firstMatch(block);
+        if (uidMatch != null) {
+          valarmBlocksByUid[uidMatch.group(1)!.trim()] = block;
+        }
+      }
+
       for (var component in data) {
         if (component['type'] == 'VEVENT') {
           String title = component['summary'] ?? noTitleFallback;
@@ -409,10 +420,26 @@ class CalDavService {
           if (isAbo) {
             participants = allEmployees;
           } else {
-            List<String> namesInKey = calendarName.split(',');
+            // FIX: trim() prevents a leading space after a comma (e.g. "Anna, Bernd")
+            // from breaking the exact-match comparison against employee names,
+            // which previously caused participants to silently drop out of team events.
+            List<String> namesInKey = calendarName.split(',').map((s) => s.trim()).toList();
             participants = allEmployees.where((emp) => namesInKey.contains(emp.name)).toList();
             if (participants.isEmpty && allEmployees.isNotEmpty) {
               participants = [allEmployees.first];
+            }
+          }
+
+          // Read the reminder back from the raw ICS text via valarmBlocksByUid
+          // (see above), since icalendar_parser discards nested VALARM data.
+          bool notificationsEnabled = false;
+          int minutesBefore = 15;
+          final String? rawBlock = valarmBlocksByUid[component['uid']];
+          if (rawBlock != null) {
+            final match = RegExp(r'TRIGGER[^:\r\n]*:-PT(\d+)M').firstMatch(rawBlock);
+            if (match != null) {
+              notificationsEnabled = true;
+              minutesBefore = int.parse(match.group(1)!);
             }
           }
 
@@ -424,6 +451,8 @@ class CalDavService {
             end: end,
             isAllDay: isAllDay,
             participants: participants,
+            notificationsEnabled: notificationsEnabled,
+            minutesBefore: minutesBefore,
             color: isAbo ? Colors.blueGrey : (participants.length == 1 ? participants.first.color : GroupColors.getColor(calendarName)),
             location: location,
             recurrence: recurrence,
@@ -439,14 +468,20 @@ class CalDavService {
     return events;
   }
 
-  /// Quick reachability check against the first active account's
-  /// server, used to decide whether to attempt a full sync or fall
-  /// back to cached data.
+  /// Checks connectivity against a real CalDAV account only. Read-only ICS
+  /// subscriptions don't support PROPFIND, so they must never be picked as
+  /// the connection-check target — otherwise a single active ICS subscription
+  /// would falsely report the whole app as offline and block sync for every
+  /// other account.
   static Future<bool> checkConnection() async {
     try {
       final accounts = await SecureVault.getAllAccounts();
-      final active = accounts.where((a) => a.isActive).toList();
-      if (active.isEmpty) return false;
+      final active = accounts.where((a) => a.isActive && !a.isReadOnly).toList();
+
+      // Only read-only ICS subscriptions are active: nothing to PROPFIND
+      // against. Let the sync flow continue so the abo(s) can still be
+      // fetched via their own GET-based path in fetchAllEvents().
+      if (active.isEmpty) return true;
 
       final acc = active.first;
       final basicAuth = 'Basic ${base64Encode(utf8.encode('${acc.username}:${acc.password}'))}';
@@ -597,7 +632,16 @@ class CalDavService {
     if (allEx.isNotEmpty) {
       ex = "EXDATE;VALUE=DATE:${allEx.map((d) => DateFormat("yyyyMMdd").format(d.toLocal())).join(",")}\n";
     }
-    return '''BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Team Planer App//DE\nBEGIN:VEVENT\nUID:$uid\nDTSTAMP:$dtStamp\n$ds\n$de\nSUMMARY:${event.title}\nDESCRIPTION:Teilnehmer: ${event.participants.map((p) => p.name).join(', ')}\nLOCATION:${event.location}\n$r${ex}END:VEVENT\nEND:VCALENDAR''';
+
+    // Persist the reminder as a standard VALARM component so it survives
+    // every CalDAV sync/re-fetch and works across all devices, instead of
+    // living only in local app state.
+    String va = "";
+    if (event.notificationsEnabled) {
+      va = "BEGIN:VALARM\nACTION:DISPLAY\nDESCRIPTION:Reminder\nTRIGGER:-PT${event.minutesBefore}M\nEND:VALARM\n";
+    }
+
+    return '''BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Team Planer App//DE\nBEGIN:VEVENT\nUID:$uid\nDTSTAMP:$dtStamp\n$ds\n$de\nSUMMARY:${event.title}\nDESCRIPTION:Teilnehmer: ${event.participants.map((p) => p.name).join(', ')}\nLOCATION:${event.location}\n${r}${ex}${va}END:VEVENT\nEND:VCALENDAR''';
   }
 
   // --- To-do functions ---
@@ -672,16 +716,21 @@ class CalDavService {
     return "$base/remote.php/dav/calendars/${acc.username}/";
   }
 
-  /// Creates a new `VTODO`-only collection named [listName] under
-  /// [account]'s (or the first to-do-enabled account's) calendar
-  /// home, and returns its path if successful.
-  static Future<String?> createNewList(String listName, {CalDavAccount? account}) async {
+  /// Determines whether a CalDAV collection path represents a private list.
+  /// Privacy is encoded directly in the server path so that every device
+  /// can derive it from a plain PROPFIND, without relying on local device state.
+  static bool isPrivatePath(String path) {
+    return path.toLowerCase().contains('/list_private_');
+  }
+
+  static Future<String?> createNewList(String listName, {bool isPrivate = false, CalDavAccount? account}) async {
     final acc = account ?? (await getTodoAccounts()).firstOrNull;
     if (acc == null) return null;
 
     final String homeUrl = await _getCalendarHome(acc);
     final String uid = DateTime.now().millisecondsSinceEpoch.toString();
-    final String calendarUrl = "${homeUrl}list_$uid/";
+    final String marker = isPrivate ? 'list_private_' : 'list_shared_';
+    final String calendarUrl = "$homeUrl$marker$uid/";
 
     try {
       final res = await http.Response.fromStream(
@@ -695,10 +744,30 @@ class CalDavService {
     return null;
   }
 
-  /// Lists the to-do collections available under [account]'s calendar
-  /// home: collections explicitly typed `VTODO`, plus a heuristic
-  /// fallback (matching on href/display-name keywords) for servers
-  /// that don't report `supported-calendar-component-set` accurately.
+  /// Moves a list from [oldPath] to [newPath] on the server via WebDAV MOVE.
+  /// Used to migrate legacy, locally-flagged private lists to the new
+  /// path-based scheme. Some servers (e.g. Synology) reject MOVE for security
+  /// reasons - callers must handle a `false` return gracefully, not assume success.
+  static Future<bool> moveList(String oldPath, String newPath, {CalDavAccount? account}) async {
+    final acc = account ?? (await getTodoAccounts()).firstOrNull;
+    if (acc == null) return false;
+
+    final String oldUrl = _buildFullUrl(acc, oldPath);
+    final String newUrl = _buildFullUrl(acc, newPath);
+
+    try {
+      final res = await http.Response.fromStream(
+          await (http.Request('MOVE', Uri.parse(oldUrl))
+            ..headers['Authorization'] = 'Basic ${base64Encode(utf8.encode('${acc.username}:${acc.password}'))}'
+            ..headers['Destination'] = newUrl
+            ..headers['Overwrite'] = 'F')
+              .send());
+      return res.statusCode == 201 || res.statusCode == 204;
+    } catch (_) {
+      return false;
+    }
+  }
+
   static Future<Map<String, String>> fetchTodoLists({CalDavAccount? account}) async {
     final acc = account ?? (await getTodoAccounts()).firstOrNull;
     if (acc == null) return {};
