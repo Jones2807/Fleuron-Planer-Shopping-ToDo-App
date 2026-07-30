@@ -88,20 +88,31 @@ class _CalDavTodoScreenState extends State<CalDavTodoScreen> {
 
     final savedHidden = prefs.getStringList('hiddenListPaths_$accountId') ?? [];
     _hiddenListPaths = savedHidden.toSet();
-    List<String> privateNames = prefs.getStringList('privateListNames_$accountId') ?? [];
+    // Legacy, device-local privacy flags - only used as a one-time migration
+    // hint below. The path itself is now the authoritative source of truth.
+    List<String> legacyPrivateNames = prefs.getStringList('privateListNames_$accountId') ?? [];
 
     final serverLists = await CalDavService.fetchTodoLists(account: _selectedAccount);
     _sharedLists.clear();
     _privateLists.clear();
 
     if (serverLists.isNotEmpty) {
-      serverLists.forEach((name, path) {
-        if (privateNames.contains(name)) {
+      for (final entry in serverLists.entries) {
+        final name = entry.key;
+        final path = entry.value;
+
+        if (CalDavService.isPrivatePath(path)) {
           _privateLists[name] = path;
+        } else if (legacyPrivateNames.contains(name)) {
+          // Migrate a list that was only marked private locally on this device
+          // (old scheme) by moving it server-side, so every device agrees.
+          final newPath = _withPrivateMarker(path);
+          final moved = await CalDavService.moveList(path, newPath, account: _selectedAccount);
+          _privateLists[name] = moved ? newPath : path; // fall back to local-only if server rejects MOVE
         } else {
           _sharedLists[name] = path;
         }
-      });
+      }
       _saveAllLists();
     } else {
       final savedShared = prefs.getString('customSharedLists_$accountId');
@@ -110,6 +121,12 @@ class _CalDavTodoScreenState extends State<CalDavTodoScreen> {
       if (savedPrivate != null) (jsonDecode(savedPrivate) as Map).forEach((k, v) => _privateLists[k] = v.toString());
     }
     setState(() => _isLoading = false);
+  }
+
+  /// Inserts the private marker into a list path created under the old scheme
+  /// (e.g. ".../list_1700000000000/" -> ".../list_private_1700000000000/").
+  String _withPrivateMarker(String path) {
+    return path.replaceFirst('/list_', '/list_private_');
   }
 
   Future<void> _saveAllLists() async {
@@ -147,7 +164,7 @@ class _CalDavTodoScreenState extends State<CalDavTodoScreen> {
             if (controller.text.isNotEmpty && _selectedAccount != null) {
               setState(() => _isLoading = true); Navigator.pop(context);
               final name = controller.text.trim();
-              final path = await CalDavService.createNewList(name, account: _selectedAccount);
+              final path = await CalDavService.createNewList(name, isPrivate: !isShared, account: _selectedAccount);
               if (path != null) {
                 setState(() { if (isShared) {
                   _sharedLists[name] = path;
