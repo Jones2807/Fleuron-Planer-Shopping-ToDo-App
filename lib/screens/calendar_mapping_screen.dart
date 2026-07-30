@@ -175,11 +175,11 @@ class _CalendarMappingScreenState extends State<CalendarMappingScreen> {
       if (currentMapped.isEmpty) {
         List<String> newSelection = [];
         for (var emp in _currentWorkspaceTeam) {
-          // If the calendar name contains the employee name, map it automatically
           if (name.toLowerCase().contains(emp.name.toLowerCase())) {
             newSelection.add(emp.name);
           }
         }
+        newSelection.sort();
         if (newSelection.isNotEmpty) {
           if (!_accountMappings.containsKey(_selectedAccount!.id)) {
             _accountMappings[_selectedAccount!.id] = {};
