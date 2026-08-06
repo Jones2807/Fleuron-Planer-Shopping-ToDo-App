@@ -189,7 +189,7 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
     }
 
     if (mounted) {
-      final storeEntries = diff!.forCategory(SyncCategory.stores);
+      final storeEntries = diff.forCategory(SyncCategory.stores);
       final routeEntries = diff.forCategory(SyncCategory.routes);
       final teamEntries = diff.forCategory(SyncCategory.team);
 

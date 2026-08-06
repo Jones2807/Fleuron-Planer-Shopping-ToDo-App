@@ -641,7 +641,7 @@ class CalDavService {
       va = "BEGIN:VALARM\nACTION:DISPLAY\nDESCRIPTION:Reminder\nTRIGGER:-PT${event.minutesBefore}M\nEND:VALARM\n";
     }
 
-    return '''BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Team Planer App//DE\nBEGIN:VEVENT\nUID:$uid\nDTSTAMP:$dtStamp\n$ds\n$de\nSUMMARY:${event.title}\nDESCRIPTION:Teilnehmer: ${event.participants.map((p) => p.name).join(', ')}\nLOCATION:${event.location}\n${r}${ex}${va}END:VEVENT\nEND:VCALENDAR''';
+    return '''BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Team Planer App//DE\nBEGIN:VEVENT\nUID:$uid\nDTSTAMP:$dtStamp\n$ds\n$de\nSUMMARY:${event.title}\nDESCRIPTION:Teilnehmer: ${event.participants.map((p) => p.name).join(', ')}\nLOCATION:${event.location}\n$r$ex${va}END:VEVENT\nEND:VCALENDAR''';
   }
 
   // --- To-do functions ---
