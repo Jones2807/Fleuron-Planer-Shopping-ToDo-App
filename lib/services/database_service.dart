@@ -85,7 +85,16 @@ class LocalDatabase {
     await db.transaction((txn) async {
       await txn.delete('events');
       for (var event in serverEvents) {
-        await txn.insert('events', event.toMap());
+        // Use REPLACE instead of the default ABORT conflict behavior: if the
+        // server ever returns two events sharing the same UID (e.g. due to a
+        // misconfigured calendar mapping), the later one simply overwrites
+        // the earlier one instead of throwing and rolling back the entire
+        // cache refresh, which would otherwise leave the calendar view empty.
+        await txn.insert(
+          'events',
+          event.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
       }
     });
   }
