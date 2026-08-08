@@ -45,18 +45,50 @@ class CalDavService {
     return _calendarMap.keys.where((k) => k.contains(',')).toList();
   }
 
+  /// Resolves an absolute href (starting with '/') against the account's
+  /// base URL, respecting the web CORS tunnel when active.
+  ///
+  /// On native platforms this simply concatenates href onto the account's
+  /// origin. On web, if baseUrl is a CORS-tunnel URL
+  /// (…/cors.php?target=https://real-server), the href is re-wrapped
+  /// inside a fresh "target=" value pointing at the real server's origin,
+  /// instead of being appended to the tunnel host itself.
+  static String _resolveAbsoluteHref(String baseUrl, String href) {
+    final normalizedHref = href.endsWith('/') ? href : '$href/';
+
+    if (kIsWeb) {
+      final tunnelUri = Uri.parse(baseUrl);
+      final target = tunnelUri.queryParameters['target'];
+      if (target != null && target.isNotEmpty) {
+        final targetUri = Uri.parse(target);
+        final realOrigin =
+            "${targetUri.scheme}://${targetUri.host}${targetUri.hasPort ? ':${targetUri.port}' : ''}";
+        final tunnelBase =
+            "${tunnelUri.scheme}://${tunnelUri.host}${tunnelUri.hasPort ? ':${tunnelUri.port}' : ''}${tunnelUri.path}";
+        return "$tunnelBase?target=${Uri.encodeQueryComponent('$realOrigin$normalizedHref')}";
+      }
+    }
+
+    final uri = Uri.parse(baseUrl);
+    final origin = "${uri.scheme}://${uri.host}${uri.hasPort ? ':${uri.port}' : ''}";
+    return "$origin$normalizedHref";
+  }
   /// Resolves a possibly-relative calendar [href] to an absolute,
   /// trailing-slash-terminated URL for [account].
   static String _buildFullUrl(CalDavAccount account, String href) {
     if (href.startsWith('http')) return href.endsWith('/') ? href : "$href/";
+
     String baseUrl = account.url;
     if (baseUrl.endsWith('/')) {
       baseUrl = baseUrl.substring(0, baseUrl.length - 1);
     }
-    Uri uri = Uri.parse(baseUrl);
-    String origin = "${uri.scheme}://${uri.host}${uri.hasPort ? ':${uri.port}' : ''}";
-    String fullUrl = href.startsWith('/') ? "$origin$href" : "$baseUrl/$href";
-    return fullUrl.endsWith('/') ? fullUrl : "$fullUrl/";
+
+    if (!href.startsWith('/')) {
+      final fullUrl = "$baseUrl/$href";
+      return fullUrl.endsWith('/') ? fullUrl : "$fullUrl/";
+    }
+
+    return _resolveAbsoluteHref(baseUrl, href);
   }
 
   /// Discovers all calendars on the currently-configured CalDAV
@@ -71,7 +103,6 @@ class CalDavService {
     final basicAuth = 'Basic ${base64Encode(utf8.encode('${CalDavConfig.username}:${CalDavConfig.password}'))}';
     String base = CalDavConfig.serverUrl;
     if (base.endsWith('/')) base = base.substring(0, base.length - 1);
-    String origin = Uri.parse(base).origin;
 
     String principalUrl = "";
     List<String> principalTargets = [base, "$base/remote.php/dav/", "$base/.well-known/caldav"];
@@ -99,7 +130,7 @@ class CalDavService {
     String calendarHomeUrl = "";
     if (principalUrl.isNotEmpty) {
       try {
-        final String target = principalUrl.startsWith('http') ? principalUrl : "$origin$principalUrl";
+        final String target = principalUrl.startsWith('http') ? principalUrl : _resolveAbsoluteHref(base, principalUrl);
         final reqHome = http.Request('PROPFIND', Uri.parse(target))
           ..headers['Authorization'] = basicAuth
           ..headers['Depth'] = '0'
@@ -117,7 +148,7 @@ class CalDavService {
     }
 
     List<String> pathsToTest = [];
-    if (calendarHomeUrl.isNotEmpty) pathsToTest.add(calendarHomeUrl.startsWith('http') ? calendarHomeUrl : "$origin$calendarHomeUrl");
+    if (calendarHomeUrl.isNotEmpty) pathsToTest.add(calendarHomeUrl.startsWith('http') ? calendarHomeUrl : _resolveAbsoluteHref(base, calendarHomeUrl));
     pathsToTest.addAll([
       base,
       "$base/remote.php/dav/calendars/${CalDavConfig.username}/",
@@ -688,8 +719,9 @@ class CalDavService {
     String calendarHomeUrl = "";
     if (principalUrl.isNotEmpty) {
       try {
-        String origin = Uri.parse(base).origin;
-        final String target = principalUrl.startsWith('http') ? principalUrl : "$origin$principalUrl";
+        final String target = principalUrl.startsWith('http')
+            ? principalUrl
+            : _resolveAbsoluteHref(base, principalUrl);
 
         final reqHome = http.Request('PROPFIND', Uri.parse(target))
           ..headers['Authorization'] = basicAuth
@@ -709,11 +741,16 @@ class CalDavService {
     }
 
     if (calendarHomeUrl.isNotEmpty) {
-      String origin = Uri.parse(base).origin;
-      return calendarHomeUrl.startsWith('http') ? calendarHomeUrl : "$origin$calendarHomeUrl";
+      return calendarHomeUrl.startsWith('http')
+          ? calendarHomeUrl
+          : _resolveAbsoluteHref(base, calendarHomeUrl);
     }
 
-    return "$base/remote.php/dav/calendars/${acc.username}/";
+    // Fallback: standard CalDAV discovery failed (expected on Synology, which
+    // implements neither /remote.php/dav/ nor .well-known/caldav). Use the
+    // known-correct Synology CalDAV path instead of the previous generic
+    // (Nextcloud-style) fallback, which Synology doesn't support either.
+    return _resolveAbsoluteHref(base, "/caldav.php/${acc.username}/home/");
   }
 
   /// Determines whether a CalDAV collection path represents a private list.
