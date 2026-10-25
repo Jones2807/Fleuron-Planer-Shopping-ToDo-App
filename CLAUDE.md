@@ -15,6 +15,26 @@ gitignored und darf nie eingecheckt werden.
 - `flutter gen-l10n` – nach Änderungen an den ARB-Dateien
 - Unter Windows braucht der Build den Entwicklermodus (Symlinks).
 
+## Fernsteuerung (flutter_driver / Dart-MCP-Server)
+- Start mit aktivierter Treiber-Erweiterung: `flutter run -t test_driver/app.dart`
+  (bzw. `launch_app` des MCP-Servers mit diesem Target). `lib/main.dart` bleibt der
+  normale Einstieg; die Startdatei ruft ihn nur auf.
+- Plattformen: Android (Gerät/Emulator) und Web (Chrome). Im Web nach dem Start per
+  `dtd listDtdUris` + `connect` mit dem Daemon verbinden; `screenshot` funktioniert dort
+  nicht, stattdessen `waitFor`/`get_text`/Widget-Baum nutzen. Windows/macOS/Linux
+  starten derzeit nicht (NotificationService.init ohne Desktop-Einstellungen, sqflite
+  ohne Desktop-Implementierung).
+- Lokaler CORS-Tunnel für Web-Tests: `php-tunnel/cors.example.php` nach
+  `php-tunnel/cors.php` kopieren (gitignored), dort nur `localhost` erlauben und mit
+  `php -d display_errors=0 -S localhost:8081 -t php-tunnel` starten. Server-URL in der
+  App: `http://localhost:8081/cors.php?target=https://<caldav-server>`. Diese
+  localhost-Freigabe nie auf einen öffentlichen Webspace übernehmen.
+- Android-Systemdialoge kann flutter_driver nicht bedienen. Berechtigungen vorab setzen:
+  `adb shell pm grant com.spessartblume.fleuron android.permission.POST_NOTIFICATIONS`
+  `adb shell appops set com.spessartblume.fleuron SCHEDULE_EXACT_ALARM allow`
+- Zugangsdaten für Testkonten nur in der laufenden App eingeben, niemals in Dateien
+  im Repo ablegen.
+
 ## Arbeitsweise
 - Bevor du Code änderst: Lösungsansatz vorstellen und auf mein ausdrückliches Go warten.
 - Arbeite nur auf Branches `claude/<aufgabe>`, immer von einem aktuellen `develop` abgezweigt.

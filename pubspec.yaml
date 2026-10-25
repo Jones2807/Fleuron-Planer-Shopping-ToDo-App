@@ -41,6 +41,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  # Enables remote control of the running app (e.g. via the Dart MCP server).
+  # Only used by test_driver/app.dart, never shipped in release builds.
+  flutter_driver:
+    sdk: flutter
   flutter_lints: ^6.0.0
 
   # --- BUILD TOOLS (icons & splash screen) ---
