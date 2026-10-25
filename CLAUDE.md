@@ -19,7 +19,8 @@ gitignored und darf nie eingecheckt werden.
 - Bevor du Code änderst: Lösungsansatz vorstellen und auf mein ausdrückliches Go warten.
 - Arbeite nur auf Branches `claude/<aufgabe>`, immer von einem aktuellen `develop` abgezweigt.
   Niemals direkt auf `develop` oder `master` committen.
-- Pull Requests gehen immer nach `develop`, nie nach `master`.
+- Pull Requests gehen immer nach `develop`, nie nach `master`, und werden mit der
+  GitHub CLI erstellt: `gh pr create --base develop`.
 
 ## Konventionen
 - Commit-Messages im Conventional-Commits-Format, auf Englisch
